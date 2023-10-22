@@ -16,32 +16,48 @@ const App = () => {
       setIsLoading(true)
       const response = await fetch(url)
       const tours = await response.json()
-      setIsLoading(false)
       setTours(tours)
       console.log(tours)
     } catch (error) {
       console.log(error)
     }
+    setIsLoading(false)
   }
   useEffect(() => {
     fetchData()
   }, [])
 
   if (isLoadinng) {
-    return <Loading />
-  } else {
     return (
-      <>
-        <h1 className="title title-underlin">our tour </h1>
-        {tours.length < 1 ? (
-          <button type="button" className="info-btn btn" onClick={fetchData}>
-            Re-Fetching
-          </button>
-        ) : (
-          <Tours tours={tours} removeTour={removeTour} />
-        )}
-      </>
+      <main>
+        <Loading />
+      </main>
     )
   }
+
+  if (tours.length === 0) {
+    return (
+      <main>
+        <div className="title">
+          <h2>No Tour left</h2>
+          <div className="title-underline"></div>
+          <button
+            type="button"
+            style={{ marginTop: '2rem' }}
+            className="btn"
+            onClick={fetchData}
+          >
+            Re-Fetching
+          </button>
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <main>
+      <Tours tours={tours} removeTour={removeTour} />
+    </main>
+  )
 }
 export default App
